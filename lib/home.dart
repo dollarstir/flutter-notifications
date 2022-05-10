@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import './notifications.dart';  
 
 class Homepage extends StatefulWidget {
   Homepage({Key? key}) : super(key: key);
@@ -32,10 +33,11 @@ class _HomepageState extends State<Homepage> {
                         )),
                     TextButton(
                         onPressed: () {
-                         AwesomeNotifications().requestPermissionToSendNotifications().then((_) {
-                           Navigator.pop(context);
-
-                         });
+                          AwesomeNotifications()
+                              .requestPermissionToSendNotifications()
+                              .then((_) {
+                            Navigator.pop(context);
+                          });
                         },
                         child: Text(
                           'Allow',
@@ -58,7 +60,11 @@ class _HomepageState extends State<Homepage> {
         ),
         body: SafeArea(
             child: SingleChildScrollView(
-          child: Center(child: Text('Hello')),
+          child: Center(
+              child: ElevatedButton(
+            child: Text('Send'),
+            onPressed: creatNotification,
+          )),
         )));
   }
 }
