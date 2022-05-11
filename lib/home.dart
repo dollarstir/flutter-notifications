@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import './notifications.dart';  
+import './second.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key? key}) : super(key: key);
@@ -50,6 +52,21 @@ class _HomepageState extends State<Homepage> {
                 ));
       }
     });
+
+    AwesomeNotifications().actionStream.listen((notifications){
+      if(notifications.channelKey == "baisc_channel" && Platform.isIOS){
+        AwesomeNotifications().getGlobalBadgeCounter().then((value) => AwesomeNotifications().setGlobalBadgeCounter(value - 1));
+      }
+      Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder :(_) => second(),),(route)=> route.isFirst);
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    AwesomeNotifications().actionSink.close();
+    AwesomeNotifications().createdSink.close();
+    super.dispose();
   }
 
   @override
