@@ -8,6 +8,7 @@ import 'package:workmanager/workmanager.dart';
 import "package:http/http.dart" as http;
 
 import 'notifications.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 Future backgroundNotifications() async {
   print("Done");
@@ -34,6 +35,7 @@ Future backgroundNotifications() async {
     );
 
     List results = json.decode(response.body);
+
     creatNotification1();
 
   } catch (e) {
@@ -43,11 +45,54 @@ Future backgroundNotifications() async {
   _notification.dispose();
 }
 
+
+
+Future _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    return  info.version;
+  }
+
+  
+
+  Future version() async {
+    String blurl = "https://icounselgh.net/version";
+    var response = await http.post(Uri.parse(blurl), body: {
+      "userid": '1',
+    });
+    var result = jsonDecode(response.body);
+
+    return result;
+  }
+
+   checkVersion() async{
+    var  myv= await _initPackageInfo(); 
+    myv = myv.replaceAll('.','');
+    myv = int.parse(myv);
+    var cver = await version();
+    var currentversion  = cver[0]['version'];
+    currentversion = currentversion.replaceAll('.','');
+    currentversion = int.parse(currentversion);
+    var ss = '';
+    if(currentversion > myv){
+      ss = 'update available';
+
+    }
+    else{
+      ss ='uptodate';
+    }
+    return ss;
+
+  }
+
 void dispatcher() {
   Workmanager().executeTask((taskName, inputData) async {
     switch (taskName) {
       case "notifications":
-        await backgroundNotifications();
+       var repo =await checkVersion() ;
+       if(repo == 'update available'){
+        creatNotification1();
+       
+      }
         break;
       default:
     }
@@ -62,14 +107,14 @@ void main() {
   Workmanager backgroundTaskManager = Workmanager();
   backgroundTaskManager.initialize(
     dispatcher,
-    isInDebugMode: true,
+    // isInDebugMode: true,
   );
 
   backgroundTaskManager.registerPeriodicTask(
     "notifications",
     "notifications",
     frequency: const Duration(minutes: 1),
-    initialDelay: const Duration(seconds: 20),
+    // initialDelay: const Duration(seconds: 20),
     constraints: Constraints(
       networkType: NetworkType.connected,
     ),

@@ -11,6 +11,7 @@ Future<void> creatNotification() async {
     body: 'This test notifications ',
     bigPicture: 'https://www.tict-edu.org/images/tucee/5.png',
     notificationLayout: NotificationLayout.BigPicture,
+    
   ));
 }
 
@@ -19,8 +20,8 @@ Future<void> creatNotification1() async {
       content: NotificationContent(
     id: generateuid(),
     channelKey: 'basic_channel',
-    title :'Yolk Notifcation',
-    body: 'This is new notification notifications ',
+    title :'My App',
+    body: 'Update Available',
     // bigPicture: 'https://www.tict-edu.org/images/tucee/5.png',
     notificationLayout: NotificationLayout.Default,
   ));

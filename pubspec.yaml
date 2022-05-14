@@ -36,7 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   awesome_notifications: ^0.6.21
   http:
-  workmanager: ^0.4.1 
+  workmanager: ^0.4.1
+  package_info_plus: ^1.4.2 
 
 dev_dependencies:
   flutter_test:
